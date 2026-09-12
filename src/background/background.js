@@ -100,10 +100,10 @@ async function updateBadge (tabId, results) {
  */
 function iconPaths (category) {
   return {
-    16: `src/icons/icon-${category}-16.png`,
-    32: `src/icons/icon-${category}-32.png`,
-    48: `src/icons/icon-${category}-48.png`,
-    128: `src/icons/icon-${category}-128.png`
+    16: chrome.runtime.getURL(`src/icons/icon-${category}-16.png`),
+    32: chrome.runtime.getURL(`src/icons/icon-${category}-32.png`),
+    48: chrome.runtime.getURL(`src/icons/icon-${category}-48.png`),
+    128: chrome.runtime.getURL(`src/icons/icon-${category}-128.png`)
   };
 }
 
