@@ -7,6 +7,7 @@ export default {
     // 3. Any directory named node_modules is ignored
     'package.json',
     'pnpm-lock.yaml',
-    'screenshots'
+    'screenshots',
+    'tests'
   ]
 };
