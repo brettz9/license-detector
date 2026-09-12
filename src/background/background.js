@@ -232,6 +232,8 @@ onSettingsChanged(async (settings) => {
   );
 });
 
+let streamingShouldBlock;
+
 // Firefox-only true first-load blocking, enabled lazily once the optional
 // webRequestBlocking/webRequestFilterResponse permissions are granted (the
 // user opts in from the options page).
@@ -265,6 +267,7 @@ async function maybeEnableStreamingBlock () {
   );
 }
 
+(async () => {
 // A synchronously-readable settings cache: `streamingShouldBlock` is called
 // from the Firefox `StreamFilter` callback above, which can't await.
 const streamingSettingsCache = {settings: await getSettings()};
@@ -276,11 +279,13 @@ onSettingsChanged((s) => {
  * @param {string} category
  * @returns {boolean}
  */
-function streamingShouldBlock (category) {
+streamingShouldBlock = (category) => {
   const {settings} = streamingSettingsCache;
   return Boolean(settings?.blockingEnabled) &&
     !settings.allowedCategories.includes(category);
 }
 
 chrome.permissions.onAdded?.addListener(maybeEnableStreamingBlock);
+
 await maybeEnableStreamingBlock();
+})();
