@@ -173,9 +173,13 @@ async function handlePageScripts (message, sender) {
     return;
   }
 
-  const results = {pageUrl: message.pageUrl, scripts: {}};
-
-  await Promise.all(message.scripts.map(async (script) => {
+  // Collect [key, entry] pairs rather than assigning into a shared object
+  // from within each concurrent callback: classification is async (a
+  // cache lookup, sometimes a fetch), so callbacks can settle in a
+  // different order than `message.scripts`, and building the object
+  // straight from settlement order would scramble the popup's list away
+  // from the page's actual script order.
+  const entries = await Promise.all(message.scripts.map(async (script) => {
     if (script.inline) {
       const detected = detectFromSource(script.text ?? '');
       const spdxId = detected.spdxId ??
@@ -190,19 +194,20 @@ async function handlePageScripts (message, sender) {
       } else if (spdxId && detected.licenseText) {
         source = 'in-script-license-text';
       }
-      results.scripts[`inline#${script.index}`] = {
-        spdxId,
-        category,
-        source,
-        inline: true
-      };
-      return;
+      return [
+        `inline#${script.index}`,
+        {spdxId, category, source, inline: true}
+      ];
     }
 
     const webLabelHint = message.webLabels?.[script.src];
     const entry = await classifyExternalScript(script.src, webLabelHint);
-    results.scripts[script.src] = {...entry, inline: false};
+    return [script.src, {...entry, inline: false}];
   }));
+
+  const results = {
+    pageUrl: message.pageUrl, scripts: Object.fromEntries(entries)
+  };
 
   await saveTabResults(tabId, results);
   await updateBadge(tabId, results);

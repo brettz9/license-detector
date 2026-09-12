@@ -148,6 +148,22 @@ export async function classify (spdxId) {
   if (!spdxId) {
     return 'missing';
   }
+  // Not a real SPDX identifier, but "UNLICENSED" is npm's own convention
+  // (in `package.json`'s `license` field, and sometimes copied verbatim
+  // into an `SPDX-License-Identifier:` comment) for "copyright reserved,
+  // no rights granted" — distinct from the actual Unlicense (public
+  // domain) SPDX id handled by the index lookup below.
+  if ((/^unlicensed$/iv).test(spdxId.trim())) {
+    return 'unlicensed';
+  }
+  // Likewise, "SEE LICENSE IN <file>" is npm's convention (again from
+  // `package.json`'s "license" field) for a custom, non-SPDX license
+  // whose text lives in a separate file the tag points to — mapped to
+  // "custom" rather than falling through to the generic "uncategorized"
+  // below, which is reserved for licenses we simply haven't classified.
+  if ((/^see license in\b/iv).test(spdxId.trim())) {
+    return 'custom';
+  }
   const index = await getLicenseIndex();
   // Try the id as-is, then strip common "-or-later"/"-only" SPDX suffixes,
   // then try the first branch of an "A OR B" expression.

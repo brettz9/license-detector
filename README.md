@@ -47,6 +47,11 @@ Whatever identifier is found is classified using
 [`license-types`](https://github.com/brettz9/license-types) (SPDX id ->
 category, e.g. `permissive`, `weaklyProtective`, `protective`,
 `publicDomain`, ...) and colored/labeled using that package's `types.json`.
+Two npm `package.json` `"license"` field conventions are also recognized
+if they show up verbatim as a script's identifier: `UNLICENSED`
+("copyright reserved, no rights granted") and `SEE LICENSE IN <file>` (a
+custom, non-SPDX license), classified as `unlicensed` and `custom`
+respectively rather than falling through to the generic `uncategorized`.
 Run `npm run build:data` (bundled into `npm run build` / `npm install`'s
 `prepare` step) to refresh `src/data/*.json` from the installed
 `license-types` version after `npm update`.

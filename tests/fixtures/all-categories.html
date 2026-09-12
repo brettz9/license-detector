@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fixture: one license per category (color legend)</title>
+    <style>
+      body { font: 14px/1.5 system-ui, sans-serif; max-width: 720px; margin: 2em auto; padding: 0 1em; }
+      table { border-collapse: collapse; margin: 1em 0; }
+      td, th { padding: 0.3em 0.6em; text-align: left; border-bottom: 1px solid #ccc; }
+      .swatch { display: inline-block; width: 1em; height: 1em; border-radius: 50%; border: 1px solid #0003; vertical-align: -0.15em; margin-right: 0.4em; }
+    </style>
+  </head>
+  <body>
+    <h1>One license per category (color legend)</h1>
+    <p>Eleven inline scripts below, each SPDX-tagged with a license from a
+    different <code>classify()</code> category
+    (<code>src/background/license-db.js</code>), so every color the popup
+    can actually produce shows up at once in its per-script list. Open the
+    popup on this page and compare each row's swatch against the legend
+    table here (colors are copied from
+    <code>src/data/license-type-info.json</code>, which is generated from
+    the <code>license-types</code> package — see that file if this legend
+    ever looks stale).</p>
+    <table>
+      <tr><th>Category</th><th>Color</th><th>Script below</th></tr>
+      <tr><td>missing</td>
+        <td><span class="swatch" style="background:lightgray"></span>lightgray</td>
+        <td>(no tag)</td></tr>
+      <tr><td>uncategorized</td>
+        <td><span class="swatch" style="background:darkgray"></span>darkgray</td>
+        <td><code>LicenseRef-Example-Custom</code></td></tr>
+      <tr><td>unlicensed</td>
+        <td><span class="swatch" style="background:black"></span>black</td>
+        <td><code>UNLICENSED</code></td></tr>
+      <tr><td>custom</td>
+        <td><span class="swatch" style="background:gray"></span>gray</td>
+        <td><code>SEE LICENSE IN LICENSE.txt</code></td></tr>
+      <tr><td>publicDomain</td>
+        <td><span class="swatch" style="background:darkgreen"></span>darkgreen</td>
+        <td><code>CC0-1.0</code></td></tr>
+      <tr><td>permissive</td>
+        <td><span class="swatch" style="background:green"></span>green</td>
+        <td><code>MIT</code></td></tr>
+      <tr><td>weaklyProtective</td>
+        <td><span class="swatch" style="background:#CCCC00"></span>#CCCC00</td>
+        <td><code>LGPL-3.0</code></td></tr>
+      <tr><td>protective</td>
+        <td><span class="swatch" style="background:pink"></span>pink</td>
+        <td><code>GPL-3.0</code></td></tr>
+      <tr><td>networkProtective</td>
+        <td><span class="swatch" style="background:#FF69B4"></span>#FF69B4</td>
+        <td><code>AGPL-3.0</code></td></tr>
+      <tr><td>useProtective</td>
+        <td><span class="swatch" style="background:red"></span>red</td>
+        <td><code>CC-BY-NC-4.0</code></td></tr>
+      <tr><td>modifyProtective</td>
+        <td><span class="swatch" style="background:red"></span>red</td>
+        <td><code>CC-BY-ND-4.0</code></td></tr>
+    </table>
+    <p>All eleven categories in <code>license-type-info.json</code> are
+    covered above. <code>unlicensed</code> and <code>custom</code> aren't
+    reachable from a real SPDX id — <code>classify()</code> special-cases
+    the literal <code>UNLICENSED</code> and <code>SEE LICENSE IN ...</code>
+    strings for them, mirroring npm's own <code>package.json</code>
+    <code>"license"</code> field conventions (see the
+    <code>license-types</code> package README) rather than anything from
+    the actual SPDX license list.</p>
+
+    <script>
+      // No SPDX identifier, no GNU license comment tag, no web-labels
+      // hint at all.
+      function missingExample () {
+        return 'category: missing';
+      }
+      missingExample();
+    </script>
+    <script>
+      // SPDX-License-Identifier: LicenseRef-Example-Custom
+      // A syntactically valid SPDX identifier for a project-specific
+      // license reference that isn't in license-index.json, so classify()
+      // falls through to "uncategorized" rather than a known category.
+      function uncategorizedExample () {
+        return 'category: uncategorized';
+      }
+      uncategorizedExample();
+    </script>
+    <script>
+      // SPDX-License-Identifier: UNLICENSED
+      // Not a real SPDX id — npm's own convention (package.json's
+      // "license" field, sometimes copied into a source comment) for
+      // "copyright reserved, no rights granted". Distinct from the actual
+      // Unlicense (public domain) SPDX id used below.
+      function unlicensedExample () {
+        return 'category: unlicensed';
+      }
+      unlicensedExample();
+    </script>
+    <script>
+      // SPDX-License-Identifier: SEE LICENSE IN LICENSE.txt
+      // Not a real SPDX id either — npm's convention for a custom license
+      // whose text lives in a separate file the tag points to.
+      function customExample () {
+        return 'category: custom';
+      }
+      customExample();
+    </script>
+    <script>
+      // SPDX-License-Identifier: CC0-1.0
+      function publicDomainExample () {
+        return 'category: publicDomain';
+      }
+      publicDomainExample();
+    </script>
+    <script>
+      // SPDX-License-Identifier: MIT
+      function permissiveExample () {
+        return 'category: permissive';
+      }
+      permissiveExample();
+    </script>
+    <script>
+      // SPDX-License-Identifier: LGPL-3.0
+      function weaklyProtectiveExample () {
+        return 'category: weaklyProtective';
+      }
+      weaklyProtectiveExample();
+    </script>
+    <script>
+      // SPDX-License-Identifier: GPL-3.0
+      function protectiveExample () {
+        return 'category: protective';
+      }
+      protectiveExample();
+    </script>
+    <script>
+      // SPDX-License-Identifier: AGPL-3.0
+      function networkProtectiveExample () {
+        return 'category: networkProtective';
+      }
+      networkProtectiveExample();
+    </script>
+    <script>
+      // SPDX-License-Identifier: CC-BY-NC-4.0
+      function useProtectiveExample () {
+        return 'category: useProtective';
+      }
+      useProtectiveExample();
+    </script>
+    <script>
+      // SPDX-License-Identifier: CC-BY-ND-4.0
+      function modifyProtectiveExample () {
+        return 'category: modifyProtective';
+      }
+      modifyProtectiveExample();
+    </script>
+  </body>
+</html>
