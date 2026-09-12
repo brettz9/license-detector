@@ -97,9 +97,12 @@ observes an inline script it has generally already run.
 
 - `storage` — settings and the classification cache.
 - `activeTab` / `tabs` — per-tab badge/icon and popup state.
-- `host_permissions` (`http://*/*`, `https://*/*`) — required for the core
-  feature: reading a script's bytes to classify it often means fetching it
-  from the background script, which needs host access to do cross-origin.
+- `host_permissions` (`http://*/*`, `https://*/*`, `file:///*`) — required
+  for the core feature: reading a script's bytes to classify it often means
+  fetching it from the background script, which needs host access to do
+  cross-origin. `file:///*` extends detection/blocking to scripts loaded
+  from local `file://` pages; see the Firefox note below — this access is
+  never granted automatically.
 - `declarativeNetRequest[Feedback]` — the Chrome-style blocking fallback.
 - `webRequest` — observing script requests.
 - `webRequestBlocking` / `webRequestFilterResponse` (**optional**, requested
@@ -118,7 +121,12 @@ Load unpacked:
 - Chrome: `chrome://extensions` -> Developer mode -> **Load unpacked** ->
   select this directory.
 - Firefox: `about:debugging#/runtime/this-firefox` -> **Load Temporary
-  Add-on** -> select `manifest.json`.
+  Add-on** -> select `manifest.json`. Declaring `file:///*` in
+  `host_permissions` does **not** grant file access by itself — Firefox
+  always keeps it off until you turn it on per-extension: go to
+  `about:addons`, open this extension's details, and enable **"Access local
+  files on your computer"** under "Permissions and data". Without that
+  toggle, scripts on `file://` pages won't be detected or blocked.
 
 Package for distribution:
 
