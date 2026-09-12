@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fixture: no license declaration (baseline)</title>
+  </head>
+  <body>
+    <h1>No license declaration (baseline)</h1>
+    <p>Expected popup result: <strong>Missing</strong> for both scripts.
+    No SPDX tag, no <code>@license</code> tag, no
+    <code>@licstart</code>/<code>@licend</code> block, and no web-labels
+    table — the control case every other fixture is compared against.</p>
+    <script>
+      function greet () {
+        return 'hello from an unlabeled inline script';
+      }
+      greet();
+    </script>
+    <script src="unlabeled-external.js"></script>
+  </body>
+</html>

@@ -1,0 +1,55 @@
+{
+  "private": true,
+  "name": "license-detector",
+  "version": "0.1.0",
+  "description": "Cross-browser MV3 extension that detects and (optionally) blocks JavaScript by license type",
+  "type": "module",
+  "license": "MIT",
+  "author": {
+    "name": "Brett Zamir",
+    "url": "http://brett-zamir.me/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:brettz9/license-detector.git"
+  },
+  "bugs": "https://github.com/brettz9/license-detector/issues",
+
+  "browserslist": [
+    "last 2 chrome versions, last 2 firefox versions"
+  ],
+  "scripts": {
+    "build:data": "node scripts/build-license-data.js",
+    "build:icons": "node scripts/build-icons.js",
+    "build": "npm run build:data && npm run build:icons",
+    "prepare": "npm run build",
+    "zip:chrome": "node scripts/zip.js chrome",
+    "zip:firefox": "node scripts/zip.js firefox",
+    "eslint": "eslint --ext=js,md,html .",
+    "lint": "npm run eslint --",
+    "open": "open http://127.0.0.1:8090/tests/fixtures/license-tag-standalone-external.html && npm run start",
+    "start": "static -p 8090",
+    "webext-lint": "web-ext lint",
+    "webext-path": "npm run eslint && web-ext run --browser-console -f /Applications/Firefox.app",
+    "webext": "npm run eslint && web-ext run --browser-console -f firefox",
+    "webext-default": "npm run eslint && web-ext run --browser-console",
+    "webext-beta": "npm run eslint && web-ext run --browser-console -f beta",
+    "webext-nightly": "npm run eslint && web-ext run --browser-console -f nightly",
+    "webext-dev": "npm run eslint && web-ext run --browser-console -f firefoxdeveloperedition",
+    "webext-build": "npm run eslint && web-ext build --overwrite-dest"
+  },
+  "dependencies": {
+    "license-types": "^3.3.0"
+  },
+  "devDependencies": {
+    "@node-static/node-static": "^0.9.2",
+    "archiver": "^7.0.1",
+    "color-name": "^2.1.1",
+    "eslint": "^10.10.0",
+    "eslint-config-ash-nazg": "^43.1.8",
+    "open-cli": "^9.0.0"
+  },
+  "engines": {
+    "node": ">=24.16.0"
+  }
+}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fixture: standalone @license tag, inline script</title>
+  </head>
+  <body>
+    <h1>Standalone <code>@license</code> tag, inline script</h1>
+    <p>Expected popup result: <strong>GPL-2.0-or-later</strong>, marked
+    "best guess". Same bare-tag convention as the external-script
+    fixture, but embedded directly in an inline <code>&lt;script&gt;</code>
+    with no <code>@licstart</code>/<code>@licend</code> wrapper at all.</p>
+    <script>
+      // @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&dn=gpl-2.0.txt GPL-2.0
+      function greet () {
+        return 'hello from a standalone-@license-tagged inline script';
+      }
+      greet();
+      // @license-end
+    </script>
+  </body>
+</html>

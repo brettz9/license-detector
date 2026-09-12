@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fixture: SPDX tag, external script</title>
+  </head>
+  <body>
+    <h1>SPDX tag, external script</h1>
+    <p>Expected popup result: <strong>Apache-2.0</strong> (certain —
+    explicit SPDX tag, not a guess). Exercises the fetch-and-classify path
+    in <code>classifyExternalScript</code>, not the inline path.</p>
+    <script src="spdx-external.js"></script>
+  </body>
+</html>

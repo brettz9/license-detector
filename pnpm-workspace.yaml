@@ -1,0 +1,3 @@
+allowBuilds:
+  is-hidden-file: true
+  unrs-resolver: true

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>License Detector</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <h1>License Detector</h1>
+    <button id="openOptions" title="Options">&#9881;</button>
+  </header>
+
+  <section id="summary" class="summary"></section>
+
+  <section>
+    <label class="toggle-row">
+      <input type="checkbox" id="blockingToggle">
+      Block non-allowed scripts on this device
+    </label>
+  </section>
+
+  <ul id="scriptList" class="script-list"></ul>
+
+  <p id="emptyState" class="empty-state" hidden>
+    No scripts detected on this page yet.
+  </p>
+
+  <script src="popup.js" type="module"></script>
+</body>
+</html>

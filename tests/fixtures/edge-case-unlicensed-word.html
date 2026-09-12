@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fixture: false positive — "unlicensed" as an ordinary word</title>
+  </head>
+  <body>
+    <h1>False positive: "unlicensed" as an ordinary word (known issue)</h1>
+    <p><strong>Correct</strong> popup result: <code>Missing</code> — this
+    notice grants no rights and names no license at all.</p>
+    <p><strong>Actual</strong> current result: <code>Unlicense</code>
+    (mapped to the <code>publicDomain</code> category), because
+    <code>license-db.js</code>'s <code>NAME_TO_SPDX</code> pattern for the
+    Unlicense is a bare, unanchored <code>/unlicense/</code> regex, which
+    matches "unlicensed" as a substring. This is security-relevant: the
+    default allowed-categories list includes <code>publicDomain</code>, so
+    with blocking enabled this script would be let through even though it
+    explicitly grants no rights. Enabling "Block scripts whose license was
+    only guessed" in Options (see README "Limitations") defends against
+    this specific case, since the category came from a guess.</p>
+    <script>
+      /**
+       * @licstart The following is the entire license notice for the
+       * JavaScript code in this page.
+       *
+       * This code was originally unlicensed prototype work; the
+       * maintainers have not yet finished drafting formal terms, and no
+       * rights are granted at this time. Contact the authors before
+       * reuse.
+       *
+       * @licend The above is the entire license notice for the
+       * JavaScript code in this page.
+       */
+      function greet () {
+        return 'hello from the unlicensed-word false-positive fixture';
+      }
+      greet();
+    </script>
+  </body>
+</html>

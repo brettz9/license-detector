@@ -1,0 +1,63 @@
+:root {
+  color-scheme: light dark;
+  font: 14px/1.5 system-ui, sans-serif;
+}
+
+body {
+  max-width: 560px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+h1 {
+  font-size: 20px;
+}
+
+h2 {
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+section {
+  margin-bottom: 28px;
+}
+
+.hint {
+  opacity: 0.7;
+  font-size: 12.5px;
+  margin: 4px 0 10px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.category-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.category-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.category-list .swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--item-color, gray);
+  flex: none;
+}
+
+button {
+  font: inherit;
+  padding: 6px 12px;
+  cursor: pointer;
+}

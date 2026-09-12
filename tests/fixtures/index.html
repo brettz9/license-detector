@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>License Detector — test fixtures</title>
+    <style>
+      body { font: 14px/1.5 system-ui, sans-serif; max-width: 720px; margin: 2em auto; padding: 0 1em; }
+      h2 { margin-top: 2em; border-bottom: 1px solid #ccc; padding-bottom: 0.2em; }
+      dt { margin-top: 0.8em; }
+      dt a { font-weight: 600; }
+      dd { margin: 0.2em 0 0 0; color: #444; }
+      code { background: #f0f0f0; padding: 0 0.3em; }
+    </style>
+  </head>
+  <body>
+    <h1>License Detector — test fixtures</h1>
+    <p>One page per license-declaration convention the extension's
+    detector recognizes (see the project's top-level README's "How
+    detection works" section for the full explanation). Load the
+    extension unpacked, open each page below, and check the popup
+    against the noted expected result.</p>
+    <p>See <a href="README.md">README.md</a> in this directory for how to
+    serve these pages and why a local server (or the file-access
+    permission) is required.</p>
+
+    <h2>Certain — explicit SPDX tag (this extension's own addition, not
+    part of GNU/LibreJS's convention)</h2>
+    <dl>
+      <dt><a href="spdx-inline.html">spdx-inline.html</a></dt>
+      <dd>Inline script, <code>SPDX-License-Identifier: MIT</code>.
+      Expected: <strong>MIT</strong>, no "guess" note.</dd>
+
+      <dt><a href="spdx-external.html">spdx-external.html</a></dt>
+      <dd>External script, <code>SPDX-License-Identifier: Apache-2.0</code>.
+      Expected: <strong>Apache-2.0</strong>, no "guess" note.</dd>
+    </dl>
+
+    <h2>Guessed — GNU's <code>@license</code>/<code>@licstart</code>/
+    <code>@licend</code> convention</h2>
+    <dl>
+      <dt><a href="license-tag-standalone-external.html"
+        >license-tag-standalone-external.html</a></dt>
+      <dd>A bare <code>// @license &lt;magnet-link&gt; &lt;name&gt;</code>
+      / <code>// @license-end</code> tag, no <code>@licstart</code>
+      wrapper — exactly how Google's <code>prettify.js</code> is tagged as
+      loaded by GNU's own librejs pages (this was completely undetected,
+      "Missing", before the fix). Expected: <strong>Apache-2.0</strong>,
+      marked "best guess".</dd>
+
+      <dt><a href="license-tag-standalone-inline.html"
+        >license-tag-standalone-inline.html</a></dt>
+      <dd>Same standalone-tag convention, embedded directly in an inline
+      script instead of an external one. Expected:
+      <strong>GPL-2.0-or-later</strong>, marked "best guess".</dd>
+
+      <dt><a href="license-tag-in-licstart.html"
+        >license-tag-in-licstart.html</a></dt>
+      <dd>The <code>@license</code> tag embedded <em>inside</em> a verbose
+      <code>@licstart</code>/<code>@licend</code> block. Expected:
+      <strong>LGPL-3.0-or-later</strong>, marked "best guess".</dd>
+
+      <dt><a href="licstart-prose-gpl3.html">licstart-prose-gpl3.html</a></dt>
+      <dd><code>@licstart</code>/<code>@licend</code> with <em>no</em> tag
+      at all — just prose. This is the exact wording GNU's own librejs
+      "free-your-javascript.html" page uses for its own inline script (also
+      previously undetected). Expected: <strong>GPL-3.0-or-later</strong>,
+      marked "best guess".</dd>
+
+      <dt><a href="licstart-prose-gpl2.html">licstart-prose-gpl2.html</a>
+      ⚠️</dt>
+      <dd>Same prose-only convention, but the classic verbatim
+      GPLv2-or-later notice. <strong>Known false positive</strong>:
+      currently misclassified as GPL-3.0-or-later — see the page itself
+      and the project README's "Limitations" section.</dd>
+
+      <dt><a href="licstart-prose-lgpl3.html">licstart-prose-lgpl3.html</a
+      ></dt>
+      <dd>Prose-only LGPLv3 notice. Expected:
+      <strong>LGPL-3.0-or-later</strong>, marked "best guess".</dd>
+
+      <dt><a href="licstart-prose-agpl3.html">licstart-prose-agpl3.html</a
+      ></dt>
+      <dd>Prose-only AGPLv3 notice. Expected:
+      <strong>AGPL-3.0-or-later</strong>, marked "best guess".</dd>
+    </dl>
+
+    <h2>Guessed — JavaScript License Web Labels table</h2>
+    <dl>
+      <dt><a href="web-labels-table.html">web-labels-table.html</a></dt>
+      <dd>A <code>#jslicense-labels1</code> table; the referenced script
+      carries no license markers of its own at all. Expected:
+      <strong>GPL-3.0-or-later</strong>, marked "best guess".</dd>
+    </dl>
+
+    <h2>Baseline and known issue</h2>
+    <dl>
+      <dt><a href="unlabeled.html">unlabeled.html</a></dt>
+      <dd>No license declaration anywhere (inline and external). Expected:
+      <strong>Missing</strong> for both.</dd>
+
+      <dt><a href="edge-case-unlicensed-word.html"
+        >edge-case-unlicensed-word.html</a> ⚠️</dt>
+      <dd><strong>Known false positive</strong>: an ordinary sentence
+      using the word "unlicensed" (granting no rights, naming no license)
+      gets misclassified as the <code>Unlicense</code> (public domain).
+      Security-relevant since <code>publicDomain</code> is allowed by
+      default — see the page itself and the project README.</dd>
+    </dl>
+  </body>
+</html>

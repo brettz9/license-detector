@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fixture: @licstart/@licend, GPLv3 prose only</title>
+  </head>
+  <body>
+    <h1><code>@licstart</code>/<code>@licend</code>, GPLv3 prose only
+    (no tag)</h1>
+    <p>Expected popup result: <strong>GPL-3.0-or-later</strong>, marked
+    "best guess". This is the exact wording GNU's own librejs
+    "free-your-javascript.html" page uses for its own inline script: a
+    verbose <code>@licstart</code>/<code>@licend</code> notice with
+    <em>no</em> machine-readable <code>@license</code> tag inside it at
+    all — identification has to come from matching the prose itself.</p>
+    <script>
+      /**
+       *
+       *    @licstart  The following is the entire license notice for the
+       *    JavaScript code in this page.
+       *
+       *
+       *       Copyright (C) 2011 Loic J. Duros, 2022 Yuchen Pei
+       *
+       *   The JavaScript code in this page is free software: you can
+       *   redistribute it and/or modify it under the terms of the GNU
+       *   General Public License (GNU GPL) as published by the Free Software
+       *   Foundation, either version 3 of the License, or (at your option)
+       *   any later version.  The code is distributed WITHOUT ANY WARRANTY;
+       *   without even the implied warranty of MERCHANTABILITY or FITNESS
+       *   FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+       *
+       *   As additional permission under GNU GPL version 3 section 7, you
+       *   may distribute non-source (e.g., minimized or compacted) forms of
+       *   that code without the copy of the GNU GPL normally required by
+       *   section 4, provided you include this license notice and a URL
+       *   through which recipients can access the Corresponding Source.
+       *
+       *
+       *
+       *   @licend  The above is the entire license notice
+       *   for the JavaScript code in this page.
+       *
+       *
+       *
+       */
+      function greet () {
+        return 'hello from a GPLv3-prose-only inline script';
+      }
+      greet();
+    </script>
+  </body>
+</html>

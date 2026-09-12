@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fixture: standalone @license tag, external script</title>
+  </head>
+  <body>
+    <h1>Standalone <code>@license</code> tag, external script</h1>
+    <p>Expected popup result: <strong>Apache-2.0</strong>, marked
+    "best guess" (derived from the magnet link's <code>dn=</code>
+    filename via <code>guessSpdxFromLabel</code>, not an SPDX tag).
+    This is the real-world case that was completely undetected
+    ("Missing") before the fix — see <code>prettify.js</code> as loaded
+    by <a href="https://www.gnu.org/software/librejs/free-your-javascript.html"
+    >GNU's own librejs page</a>.</p>
+    <script src="license-tag-standalone-external.js"></script>
+  </body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>License Detector Options</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <h1>License Detector</h1>
+
+  <section>
+    <h2>Blocking</h2>
+    <p class="hint">
+      Detection always runs. Blocking is optional and off by default: when
+      enabled, scripts whose license category isn't in your allowed list
+      below are blocked.
+    </p>
+    <label class="row">
+      <input type="checkbox" id="blockingEnabled">
+      Enable blocking
+    </label>
+    <p id="blockingModeNote" class="hint"></p>
+    <label class="row">
+      <input type="checkbox" id="blockGuesses">
+      Block scripts whose license was only guessed
+    </label>
+    <p class="hint">
+      Some licenses aren't declared with an explicit, unambiguous tag and
+      are instead inferred from a license name or URL found in the page —
+      shown as "best guess" in the popup. A guess can be wrong (e.g. by
+      matching an unrelated word), so enabling this treats guessed
+      licenses as not allowed, even if the guessed category itself would
+      otherwise be allowed below.
+    </p>
+  </section>
+
+  <section>
+    <h2>Allowed license categories</h2>
+    <p class="hint">
+      Scripts in a category <em>not</em> checked here are flagged, and (if
+      blocking is enabled) blocked.
+    </p>
+    <ul id="categoryList" class="category-list"></ul>
+  </section>
+
+  <section>
+    <h2>Cache</h2>
+    <p class="hint">Classifications are cached by script URL across page visits.</p>
+    <button id="clearCache">Clear cached classifications</button>
+    <span id="clearCacheStatus" class="hint"></span>
+  </section>
+
+  <script src="options.js" type="module"></script>
+</body>
+</html>
