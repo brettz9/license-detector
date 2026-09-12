@@ -267,6 +267,8 @@ async function maybeEnableStreamingBlock () {
   );
 }
 
+// eslint-disable-next-line @stylistic/max-len -- Long
+// eslint-disable-next-line unicorn/prefer-top-level-await -- Errs for service workers on Chrome
 (async () => {
 // A synchronously-readable settings cache: `streamingShouldBlock` is called
 // from the Firefox `StreamFilter` callback above, which can't await.
@@ -279,11 +281,13 @@ onSettingsChanged((s) => {
  * @param {string} category
  * @returns {boolean}
  */
+// eslint-disable-next-line @stylistic/max-len -- Long
+// eslint-disable-next-line unicorn/no-top-level-assignment-in-function -- Needed
 streamingShouldBlock = (category) => {
   const {settings} = streamingSettingsCache;
   return Boolean(settings?.blockingEnabled) &&
     !settings.allowedCategories.includes(category);
-}
+};
 
 chrome.permissions.onAdded?.addListener(maybeEnableStreamingBlock);
 
