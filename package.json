@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "license-detector",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Cross-browser MV3 extension that detects and (optionally) blocks JavaScript by license type",
   "type": "module",
   "license": "MIT",

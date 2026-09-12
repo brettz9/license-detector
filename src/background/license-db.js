@@ -84,7 +84,7 @@ const NAME_TO_SPDX = [
   [/bsd.*2.clause|simplified bsd/iv, 'BSD-2-Clause'],
   [/isc license/iv, 'ISC'],
   [/creative commons.*cc0|public domain|\bcc0\b/iv, 'CC0-1.0'],
-  [/unlicense/iv, 'Unlicense'],
+  [/unlicense(?!d)/iv, 'Unlicense'],
   [/x11 license|\bx11\b/iv, 'MIT']
 ];
 

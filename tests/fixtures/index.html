@@ -92,19 +92,19 @@
       <strong>GPL-3.0-or-later</strong>, marked "best guess".</dd>
     </dl>
 
-    <h2>Baseline and known issue</h2>
+    <h2>Baseline and regression tests</h2>
     <dl>
       <dt><a href="unlabeled.html">unlabeled.html</a></dt>
       <dd>No license declaration anywhere (inline and external). Expected:
       <strong>Missing</strong> for both.</dd>
 
       <dt><a href="edge-case-unlicensed-word.html"
-        >edge-case-unlicensed-word.html</a> ⚠️</dt>
-      <dd><strong>Known false positive</strong>: an ordinary sentence
-      using the word "unlicensed" (granting no rights, naming no license)
-      gets misclassified as the <code>Unlicense</code> (public domain).
-      Security-relevant since <code>publicDomain</code> is allowed by
-      default — see the page itself and the project README.</dd>
+        >edge-case-unlicensed-word.html</a></dt>
+      <dd>An ordinary sentence using the word "unlicensed" (granting no
+      rights, naming no license). Regression test for a fixed false
+      positive: this used to be misclassified as the <code>Unlicense</code>
+      (public domain) because the matching pattern was unanchored — see
+      the page itself. Expected: <strong>Missing</strong>.</dd>
     </dl>
   </body>
 </html>

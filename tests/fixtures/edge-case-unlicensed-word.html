@@ -2,22 +2,23 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Fixture: false positive — "unlicensed" as an ordinary word</title>
+    <title>Fixture: "unlicensed" as an ordinary word (regression test)</title>
   </head>
   <body>
-    <h1>False positive: "unlicensed" as an ordinary word (known issue)</h1>
-    <p><strong>Correct</strong> popup result: <code>Missing</code> — this
-    notice grants no rights and names no license at all.</p>
-    <p><strong>Actual</strong> current result: <code>Unlicense</code>
-    (mapped to the <code>publicDomain</code> category), because
+    <h1>Regression test: "unlicensed" as an ordinary word</h1>
+    <p>Expected popup result: <code>Missing</code> — this notice grants no
+    rights and names no license at all.</p>
+    <p>This used to be misclassified as <code>Unlicense</code> (mapped to
+    the <code>publicDomain</code> category), because
     <code>license-db.js</code>'s <code>NAME_TO_SPDX</code> pattern for the
-    Unlicense is a bare, unanchored <code>/unlicense/</code> regex, which
-    matches "unlicensed" as a substring. This is security-relevant: the
+    Unlicense was a bare, unanchored <code>/unlicense/</code> regex, which
+    matched "unlicensed" as a substring. That was security-relevant: the
     default allowed-categories list includes <code>publicDomain</code>, so
-    with blocking enabled this script would be let through even though it
-    explicitly grants no rights. Enabling "Block scripts whose license was
-    only guessed" in Options (see README "Limitations") defends against
-    this specific case, since the category came from a guess.</p>
+    with blocking enabled this script would have been let through even
+    though it explicitly grants no rights. The pattern now uses a negative
+    lookahead, <code>/unlicense(?!d)/</code>, so it no longer matches
+    "unlicensed". This fixture is kept as a regression test for that
+    fix.</p>
     <script>
       /**
        * @licstart The following is the entire license notice for the
