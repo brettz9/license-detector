@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fixture: blocking demo (alert if not blocked)</title>
+  </head>
+  <body>
+    <h1>Blocking demo (alert if not blocked)</h1>
+    <p>The external script below has no license declaration at all, so
+    it's classified <code>Missing</code> — a category that <strong>isn't</strong>
+    in the default allowed list (<code>publicDomain</code>,
+    <code>permissive</code>, <code>weaklyProtective</code>), making it a
+    blocking candidate. It just calls <code>alert(...)</code>, so you can
+    see with your own eyes whether it ran.</p>
+    <p>Blocking only ever applies to <strong>external</strong> scripts —
+    inline <code>&lt;script&gt;</code> content is classified for reporting
+    but never blocked, since by the time it's observed it has typically
+    already run (see the README's "How blocking works"). That's why this
+    fixture uses an external <code>.js</code> file instead of an inline
+    script.</p>
+    <ol>
+      <li>Turn on <strong>"Block non-allowed scripts on this device"</strong>
+      in the popup (or "Enable blocking" in Options).</li>
+      <li>Reload this page.</li>
+      <li><strong>Chrome</strong>: blocking is best-effort via
+      <code>declarativeNetRequest</code>, which can only block a URL
+      <em>after</em> it's been classified once — so the alert will still
+      fire on this first reload. Reload <strong>again</strong>; now that
+      the script's URL is cached as "missing", the block rule is in place
+      and the alert should <strong>not</strong> fire.</li>
+      <li><strong>Firefox</strong>: if you've granted the optional
+      "block scripts before they run" permission (Options prompts for it
+      when you enable blocking), this is true first-load blocking — the
+      alert should <strong>not</strong> fire even on the very first
+      reload after enabling.</li>
+      <li>Turn blocking back off and reload once more to confirm the
+      alert fires again.</li>
+    </ol>
+    <p>If you see the alert when you expected it to be blocked, check
+    Options → "Clear cached classifications" (a stale cache entry from
+    before you enabled blocking can otherwise persist) and reload again.</p>
+    <script src="blocking-demo-external.js"></script>
+  </body>
+</html>
