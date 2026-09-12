@@ -41,7 +41,7 @@ async function render () {
   const typeInfo = await getLicenseTypeInfo();
   const key = `tab-${tab.id}`;
   const {[key]: results} = await chrome.storage.session.get(key);
-  const scripts = results ? Object.entries(results.scripts) : [];
+  const scripts = results?.scripts ?? [];
 
   if (scripts.length === 0) {
     emptyStateEl.hidden = false;
@@ -52,13 +52,11 @@ async function render () {
   }
   emptyStateEl.hidden = true;
 
-  const categories = scripts.map(([, s]) => s.category);
+  const categories = scripts.map((s) => s.category);
   const worst = dominantCategory(categories);
   const worstInfo = typeInfo[worst] ?? {text: worst, color: ['gray']};
   const worstColor = toCssColor(worstInfo.color[0]);
-  const flaggedCount = scripts.filter(
-    ([, s]) => isFlagged(settings, s)
-  ).length;
+  const flaggedCount = scripts.filter((s) => isFlagged(settings, s)).length;
 
   summaryEl.style.setProperty('--summary-color', worstColor);
   summaryEl.replaceChildren();
@@ -76,7 +74,7 @@ async function render () {
   summaryEl.append(summarySwatch, summaryText);
 
   listEl.replaceChildren();
-  for (const [url, script] of scripts) {
+  for (const script of scripts) {
     const info = typeInfo[script.category] ??
       {text: script.category, color: ['gray']};
     const color = toCssColor(info.color[0]);
@@ -91,7 +89,9 @@ async function render () {
 
     const urlSpan = document.createElement('span');
     urlSpan.className = 'url';
-    urlSpan.textContent = script.inline ? '(inline script)' : shortUrl(url);
+    urlSpan.textContent = script.inline
+      ? '(inline script)'
+      : shortUrl(script.key);
 
     const metaSpan = document.createElement('span');
     metaSpan.className = 'meta';

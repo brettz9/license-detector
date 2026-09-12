@@ -10,3 +10,21 @@
 export function toCssColor (color) {
   return (/^[0-9a-f]{6}$/iv).test(color) ? `#${color}` : color;
 }
+
+/**
+ * `chrome.action.setBadgeBackgroundColor` (unlike every other place this
+ * extension uses a color) only accepts a hex/rgba string, not a CSS color
+ * keyword like "lightgray" — passing one throws "The color specification
+ * could not be parsed." `OffscreenCanvas` is available in a MV3 service
+ * worker (no `document`/DOM needed) and its 2D context normalizes any
+ * valid CSS color, keyword or not, to `#rrggbb` on read-back, so this
+ * covers whatever keywords `license-types` uses now or adds later without
+ * a hand-maintained keyword-to-hex table.
+ * @param {string} color a CSS color keyword or `toCssColor`-normalized hex
+ * @returns {string} a `#rrggbb` hex string
+ */
+export function toBadgeColor (color) {
+  const ctx = new OffscreenCanvas(1, 1).getContext('2d');
+  ctx.fillStyle = toCssColor(color);
+  return ctx.fillStyle;
+}

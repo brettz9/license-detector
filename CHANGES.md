@@ -3,6 +3,8 @@
 ## 0.1.2
 
 - fix: handle unlicensed and custom separately
+- fix: issue in Chrome with badge color
+- fix: inadvertent reordering of scripts
 
 ## 0.1.1
 

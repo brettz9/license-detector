@@ -7,7 +7,7 @@ import {
   setDnrBlock, clearAllDnrBlocks, supportsStreamingBlock, enableStreamingBlock
 } from './blocking.js';
 import {getSettings, onSettingsChanged} from './settings.js';
-import {toCssColor} from '../shared/colors.js';
+import {toBadgeColor} from '../shared/colors.js';
 
 // Persistent cache: script URL -> {category, spdxId, source}. Shared across
 // tabs/sessions since the same script URL usually carries the same license.
@@ -42,18 +42,24 @@ async function saveCacheEntry (url, entry) {
 }
 
 /**
+ * `results.scripts` is an array (not an object keyed by url/`inline#N`)
+ * specifically so its order survives a `chrome.storage` round-trip:
+ * storage.session/local don't guarantee preserving a plain object's key
+ * insertion order (observed in practice returning keys sorted as plain
+ * strings, e.g. "inline#10" sorting right after "inline#1" and before
+ * "inline#2"), but array element order is preserved.
  * @param {number} tabId
- * @returns {Promise<{pageUrl?: string, scripts: Object<string, object>}>}
+ * @returns {Promise<{pageUrl?: string, scripts: object[]}>}
  */
 async function getTabResults (tabId) {
   const key = `tab-${tabId}`;
   const {[key]: results} = await chrome.storage.session.get(key);
-  return results ?? {scripts: {}};
+  return results ?? {scripts: []};
 }
 
 /**
  * @param {number} tabId
- * @param {{pageUrl?: string, scripts: Object<string, object>}} results
+ * @param {{pageUrl?: string, scripts: object[]}} results
  * @returns {Promise<void>}
  */
 async function saveTabResults (tabId, results) {
@@ -63,12 +69,12 @@ async function saveTabResults (tabId, results) {
 
 /**
  * @param {number} tabId
- * @param {{pageUrl?: string, scripts: Object<string, object>}} results
+ * @param {{pageUrl?: string, scripts: object[]}} results
  * @returns {Promise<void>}
  */
 async function updateBadge (tabId, results) {
   const settings = await getSettings();
-  const categories = Object.values(results.scripts).map((s) => s.category);
+  const categories = results.scripts.map((s) => s.category);
   if (categories.length === 0) {
     await chrome.action.setBadgeText({tabId, text: ''});
     await chrome.action.setIcon({tabId, path: iconPaths('neutral')});
@@ -76,12 +82,12 @@ async function updateBadge (tabId, results) {
   }
 
   const worst = dominantCategory(categories);
-  const flaggedCount = Object.values(results.scripts).filter(
+  const flaggedCount = results.scripts.filter(
     (s) => isFlagged(settings, s)
   ).length;
 
   const typeInfo = await getLicenseTypeInfo();
-  const color = toCssColor(typeInfo[worst]?.color?.[0] ?? 'gray');
+  const color = toBadgeColor(typeInfo[worst]?.color?.[0] ?? 'gray');
 
   await chrome.action.setIcon({tabId, path: iconPaths(worst)});
   // Experiment: some browsers appear to skip repainting the toolbar icon
@@ -173,13 +179,16 @@ async function handlePageScripts (message, sender) {
     return;
   }
 
-  // Collect [key, entry] pairs rather than assigning into a shared object
-  // from within each concurrent callback: classification is async (a
-  // cache lookup, sometimes a fetch), so callbacks can settle in a
-  // different order than `message.scripts`, and building the object
-  // straight from settlement order would scramble the popup's list away
-  // from the page's actual script order.
-  const entries = await Promise.all(message.scripts.map(async (script) => {
+  // Collect entries (each carrying its own `key`) rather than assigning
+  // into a shared object from within each concurrent callback:
+  // classification is async (a cache lookup, sometimes a fetch), so
+  // callbacks can settle in a different order than `message.scripts`, and
+  // an object built from settlement order — or even one built in the
+  // right order but round-tripped through `chrome.storage` — isn't
+  // guaranteed to keep that order (storage has been observed returning
+  // object keys sorted as plain strings instead of insertion order). An
+  // array doesn't have that problem, so `results.scripts` is one.
+  const scripts = await Promise.all(message.scripts.map(async (script) => {
     if (script.inline) {
       const detected = detectFromSource(script.text ?? '');
       const spdxId = detected.spdxId ??
@@ -194,21 +203,17 @@ async function handlePageScripts (message, sender) {
       } else if (spdxId && detected.licenseText) {
         source = 'in-script-license-text';
       }
-      return [
-        `inline#${script.index}`,
-        {spdxId, category, source, inline: true}
-      ];
+      return {
+        key: `inline#${script.index}`, spdxId, category, source, inline: true
+      };
     }
 
     const webLabelHint = message.webLabels?.[script.src];
     const entry = await classifyExternalScript(script.src, webLabelHint);
-    return [script.src, {...entry, inline: false}];
+    return {key: script.src, ...entry, inline: false};
   }));
 
-  const results = {
-    pageUrl: message.pageUrl, scripts: Object.fromEntries(entries)
-  };
-
+  const results = {pageUrl: message.pageUrl, scripts};
   await saveTabResults(tabId, results);
   await updateBadge(tabId, results);
 }
@@ -262,10 +267,16 @@ async function maybeEnableStreamingBlock () {
     },
     async (tabId, url, category, spdxId) => {
       const results = await getTabResults(tabId);
-      results.scripts[url] = {
-        spdxId, category, source: 'spdx-comment', inline: false,
+      const entry = {
+        key: url, spdxId, category, source: 'spdx-comment', inline: false,
         streaming: true
       };
+      const index = results.scripts.findIndex((s) => s.key === url);
+      if (index === -1) {
+        results.scripts.push(entry);
+      } else {
+        results.scripts[index] = entry;
+      }
       await saveTabResults(tabId, results);
       await updateBadge(tabId, results);
     }
