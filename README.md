@@ -12,6 +12,8 @@ the APIs that would allow anything stronger there).
 
 **Note: This add-on was vibe-coded as a quick experiment done with a minimum of manual review. Use at your own risk. PRs welcome.**
 
+Testing can be done against the [files here](https://brettz9.github.io/license-detector/tests/fixtures/).
+
 ## How detection works
 
 Two independent, publicly-documented conventions are recognized in a
