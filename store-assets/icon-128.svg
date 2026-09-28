@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <style>
+      .halo { fill: none; stroke: #ffffff; stroke-linecap: round; }
+      .glyph { font-family: Arial, Helvetica, sans-serif; font-weight: 700; }
+    </style>
+  </defs>
+
+  <!-- white halo behind the ring, for legibility on dark backgrounds -->
+  <circle cx="54" cy="54" r="24" class="halo" stroke-width="14"/>
+  <!-- white halo behind the handle -->
+  <line x1="73.8" y1="73.8" x2="100" y2="100" class="halo" stroke-width="16"/>
+
+  <!-- colored ring: four license-category colors -->
+  <path d="M54,30 A24,24 0 0,1 78,54" fill="none" stroke="#2e7d32" stroke-width="9"/>
+  <path d="M78,54 A24,24 0 0,1 54,78" fill="none" stroke="#c9a800" stroke-width="9"/>
+  <path d="M54,78 A24,24 0 0,1 30,54" fill="none" stroke="#e91e8c" stroke-width="9"/>
+  <path d="M30,54 A24,24 0 0,1 54,30" fill="none" stroke="#d32f2f" stroke-width="9"/>
+
+  <!-- magnifying-glass handle -->
+  <line x1="73.8" y1="73.8" x2="100" y2="100" stroke="#263238" stroke-width="11" stroke-linecap="round"/>
+
+  <!-- lens face -->
+  <circle cx="54" cy="54" r="20" fill="#fbfbfb"/>
+
+  <!-- JS glyph -->
+  <text x="54" y="55" text-anchor="middle" dominant-baseline="central" class="glyph" font-size="21" fill="#263238">JS</text>
+</svg>

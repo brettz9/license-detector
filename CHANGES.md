@@ -1,5 +1,9 @@
 # CHANGES for license-detector
 
+## ?
+
+- fix: update license-types (recognizing more LGPL/GPL variants)
+
 ## 0.1.2
 
 - fix: handle unlicensed and custom separately

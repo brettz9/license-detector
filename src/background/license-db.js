@@ -116,10 +116,9 @@ export const GUESSED_SOURCES = new Set([
  * @returns {boolean}
  */
 export function isFlagged (settings, entry) {
-  if (settings.blockGuesses && GUESSED_SOURCES.has(entry.source)) {
-    return true;
-  }
-  return !settings.allowedCategories.includes(entry.category);
+  return settings.blockGuesses && GUESSED_SOURCES.has(entry.source)
+    ? true
+    : !settings.allowedCategories.includes(entry.category);
 }
 
 /**
@@ -195,10 +194,12 @@ export function dominantCategory (categories) {
   let worstRank = CATEGORY_SEVERITY.indexOf(worst);
   for (const category of categories) {
     const rank = CATEGORY_SEVERITY.indexOf(category);
-    if (rank < worstRank) {
-      worst = category;
-      worstRank = rank;
+    if (rank >= worstRank) {
+      continue;
     }
+
+    worst = category;
+    worstRank = rank;
   }
   return worst;
 }
