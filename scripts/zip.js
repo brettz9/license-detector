@@ -6,7 +6,7 @@
  * ignores `browser_specific_settings`; Firefox ignores the `scripts`/`type`
  * background keys it doesn't need once `service_worker` is supported).
  */
-import archiver from 'archiver';
+import {ZipArchive} from 'archiver';
 import {createWriteStream, existsSync} from 'node:fs';
 import {mkdir} from 'node:fs/promises';
 import {dirname, join} from 'node:path';
@@ -32,7 +32,7 @@ for (const required of requiredFiles) {
 await mkdir(distDir, {recursive: true});
 const outPath = join(distDir, `license-detector-${target}.zip`);
 const output = createWriteStream(outPath);
-const archive = archiver('zip', {zlib: {level: 9}});
+const archive = new ZipArchive({zlib: {level: 9}});
 
 archive.pipe(output);
 archive.file(join(root, 'manifest.json'), {name: 'manifest.json'});
