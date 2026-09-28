@@ -1,6 +1,6 @@
 # CHANGES for license-detector
 
-## ?
+## 0.1.4
 
 - fix: update license-types (recognizing more LGPL/GPL variants)
 
